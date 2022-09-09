@@ -1,0 +1,25 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.2.32516.85
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DirectoryScanningService", "WindowsService1\DirectoryScanningService.csproj", "{FE6E7D93-8BBF-499D-949E-032951A30661}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{FE6E7D93-8BBF-499D-949E-032951A30661}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{FE6E7D93-8BBF-499D-949E-032951A30661}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{FE6E7D93-8BBF-499D-949E-032951A30661}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{FE6E7D93-8BBF-499D-949E-032951A30661}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {661547D0-060B-4850-A2A1-B42E4B1FFA37}
+	EndGlobalSection
+EndGlobal
