@@ -1,4 +1,5 @@
-﻿using System.ServiceProcess;
+﻿using System;
+using System.ServiceProcess;
 using System.Threading;
 
 namespace WindowsService1
@@ -6,6 +7,7 @@ namespace WindowsService1
     public partial class FolderScanningService : ServiceBase
     {
         Logger logger;
+        
         public FolderScanningService()
         {
             InitializeComponent();
@@ -25,6 +27,13 @@ namespace WindowsService1
         {
             logger.Stop();
             Thread.Sleep(1000);
+        }
+        //debug
+        internal void TestStartupAndStop(string[] args)
+        {
+            this.OnStart(args);
+            Console.ReadLine();
+            this.OnStop();
         }
     }
 

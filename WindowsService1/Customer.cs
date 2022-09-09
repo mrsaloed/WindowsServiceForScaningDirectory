@@ -8,27 +8,51 @@ namespace WindowsService1
 {
     class Customer
     {
-        private int id { get; set; }
+        private int id;
         //фамилия
-        private string f { get; set; }
+        private string f;
         //имя
-        private string i { get; set; }
+        private string i;
         //отчество
-        private string o { get; set; }
-        
-        private List<Animal> animals { get; set; }
+        private string o;
+        private List<Animal> animals = new List<Animal>();
 
-        public Customer(int id, string f, string i, string o)
+        public int Id
+        { 
+            get { return id; } 
+            set { id = value; } 
+        }
+        public string F 
         {
-            this.id = id;
+            get { return f; }
+            set { f = value; } 
+        }
+        public string I 
+        { 
+            get { return i; } 
+            set { i = value; } 
+        }
+        public string O 
+        { 
+            get { return o; } 
+            set { o = value; } 
+        }
+        public void AddAnimal(Animal animal)
+        {
+            animals.Add(animal);
+        }
+
+        public List<Animal> AnimalList
+        { get { return animals; } }
+
+        public Customer(string id, string f, string i, string o)
+        {
+            this.id = Convert.ToInt32(id); ;
             this.f = f;
             this.i = i;
             this.o = o;
         }
 
-        public void AddAnimal(Animal animal)
-        {
-            animals.Add(animal);
-        }
+        
     }
 }

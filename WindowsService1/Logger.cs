@@ -46,7 +46,19 @@ namespace WindowsService1
                 {
                     writer.WriteLine(String.Format("{0} файл {1} был {2}",
                         DateTime.Now.ToString("dd/MM/yyyy hh:mm:ss"), filePath, fileEvent));
+                    Request request = new XmlParser(filePath).ParseRequest();
+                    writer.WriteLine("{0} Получен запрос от {1} с id {2} ", request.RqTime, request.Type, request.Id );
+                    writer.WriteLine("{0} Попытка записи в БД", DateTime.Now.ToString("dd/MM/yyyy hh:mm:ss"));
+                    if (new DbConnection().AddRequest(request) == 1)
+                    {
+                        writer.WriteLine("{0} Успешное добавление в БД", DateTime.Now.ToString("dd/MM/yyyy hh:mm:ss"));
+                    }
+                    else
+                    {
+                        writer.WriteLine("{0} Ошибка добавления в БД", DateTime.Now.ToString("dd/MM/yyyy hh:mm:ss"));
+                    }
                     writer.Flush();
+
                 }
             }
         }

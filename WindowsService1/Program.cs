@@ -12,14 +12,25 @@ namespace WindowsService1
         /// <summary>
         /// Главная точка входа для приложения.
         /// </summary>
-        static void Main()
+        static void Main( string[] args)
         {
-            ServiceBase[] ServicesToRun;
-            ServicesToRun = new ServiceBase[]
+            if (Environment.UserInteractive)
             {
+                FolderScanningService service1 = new FolderScanningService();
+                service1.TestStartupAndStop(args);
+            }
+            else
+            {
+                // Put the body of your old Main method here.  
+                ServiceBase[] ServicesToRun;
+                ServicesToRun = new ServiceBase[]
+                {
                 new FolderScanningService()
-            };
-            ServiceBase.Run(ServicesToRun);
+                };
+                ServiceBase.Run(ServicesToRun);
+            }
+
+            
         }
     }
 }

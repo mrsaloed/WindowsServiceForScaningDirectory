@@ -8,11 +8,35 @@ namespace WindowsService1
 {
     class Request
     {
-        private string type { get; set; }
-        private string id { get; set; }
-        private DateTime rqTime { get; set; }
+        private string type;
+        private string id;
+        private DateTime rqTime;
+        private List<Customer> customerList = new List<Customer>();
+        public string Type 
+        {
+            get { return type; }
+            set { type = value; }
+        }
 
-        private List<Customer> customerList { get; set; }
+        public string Id
+        { 
+            get { return id; }
+            set { id = value; }
+        }
+        
+        public DateTime RqTime
+        {
+            get { return rqTime; }
+            set { rqTime = value;}
+        }
+
+        public List<Customer> CustomerList
+        { get { return customerList; } }
+
+        public void AddCustomer(Customer customer)
+        {
+            customerList.Add(customer);
+        }
 
         public Request(string type, string id, string rqTime)
         {
@@ -21,9 +45,5 @@ namespace WindowsService1
             this.rqTime = Convert.ToDateTime(rqTime);
         }
 
-        public void AddCustomer(Customer customer)
-        {
-            customerList.Add(customer); 
-        }
     }
 }
