@@ -9,7 +9,7 @@ namespace WindowsService1
 {
     class DbConnection
     {
-        string _connectionString = "Data Source =F:\\Temp\\clinic.db";
+        string _connectionString = "Data Source = F:\\Temp\\clinic.db";
         string insertCustomer = "INSERT INTO Customer (id, f, i, o) VALUES (@id, @f, @i, @o)";
         string insertAnimal = "INSERT INTO Animal (id, customerId, type, Name, BirthDate) " +
 "                               VALUES (@id, @customerId, @type, @Name, @BirthDate)";
