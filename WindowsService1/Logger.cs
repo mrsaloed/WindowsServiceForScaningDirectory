@@ -34,6 +34,7 @@ namespace WindowsService1
 
         private void Watcher_Created(object sender, FileSystemEventArgs e)
         {
+            Thread.Sleep(1000);
             string fileEvent = "создан";
             string filePath = e.FullPath;
             RecordEntry(fileEvent, filePath);
@@ -47,7 +48,7 @@ namespace WindowsService1
                 {
                     writer.WriteLine(String.Format("{0} файл {1} был {2}",
                         DateTime.Now.ToString("dd/MM/yyyy hh:mm:ss"), filePath, fileEvent));
-                    Request request = new XmlParser(filePath).ParseRequest();
+                    Request request = new XmlParser().ParseRequest(filePath);
                     writer.WriteLine("{0} Получен запрос от {1} с id {2} ", request.RqTime, request.Type, request.Id );
                     writer.WriteLine("{0} Попытка записи в БД", DateTime.Now.ToString("dd/MM/yyyy hh:mm:ss"));
                     try
@@ -57,7 +58,9 @@ namespace WindowsService1
                     }
                     catch (SqliteException ex)
                     {
-                        writer.WriteLine("{0} Ошибка {1} добавления в БД: {2}", DateTime.Now.ToString("dd/MM/yyyy hh:mm:ss"), ex.SqliteExtendedErrorCode, ex.Message);
+                        writer.WriteLine("{0} Ошибка {1} добавления в БД: {2}", DateTime.Now.ToString("dd/MM/yyyy hh:mm:ss"), 
+                            ex.SqliteExtendedErrorCode, 
+                            ex.Message);
                     }
                     writer.Flush();
 

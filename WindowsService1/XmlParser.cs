@@ -4,14 +4,14 @@ namespace WindowsService1
 {
     class XmlParser
     {
-        string filePath;
-        public XmlParser(string file) 
+        
+        public XmlParser() 
         {
-            this.filePath = file;
         }
 
-        public Request ParseRequest()
+        public Request ParseRequest(string filePath)
         {
+            
             XDocument xdoc = XDocument.Load(filePath);
             Request request = null;
             XElement requestElement = xdoc.Element("request");
@@ -42,7 +42,7 @@ namespace WindowsService1
                     
                 }
             }
-            
+            xdoc.Save(filePath);
             return request;
         }
     }
