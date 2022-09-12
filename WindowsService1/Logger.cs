@@ -1,6 +1,7 @@
 ﻿using System;
 using System.IO;
 using System.Threading;
+using Microsoft.Data.Sqlite;
 
 namespace WindowsService1
 {
@@ -49,13 +50,14 @@ namespace WindowsService1
                     Request request = new XmlParser(filePath).ParseRequest();
                     writer.WriteLine("{0} Получен запрос от {1} с id {2} ", request.RqTime, request.Type, request.Id );
                     writer.WriteLine("{0} Попытка записи в БД", DateTime.Now.ToString("dd/MM/yyyy hh:mm:ss"));
-                    if (new DbConnection().AddRequest(request) == 1)
+                    try
                     {
+                        new DbConnection().AddRequest(request);
                         writer.WriteLine("{0} Успешное добавление в БД", DateTime.Now.ToString("dd/MM/yyyy hh:mm:ss"));
                     }
-                    else
+                    catch (SqliteException ex)
                     {
-                        writer.WriteLine("{0} Ошибка добавления в БД", DateTime.Now.ToString("dd/MM/yyyy hh:mm:ss"));
+                        writer.WriteLine("{0} Ошибка {1} добавления в БД: {2}", DateTime.Now.ToString("dd/MM/yyyy hh:mm:ss"), ex.SqliteExtendedErrorCode, ex.Message);
                     }
                     writer.Flush();
 
