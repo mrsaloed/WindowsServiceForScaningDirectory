@@ -43,67 +43,77 @@ namespace WindowsService1
                 using (SqliteConnection connection = new SqliteConnection(_connectionString))
                 {
                     connection.Open();
-
-                    foreach (Customer customer in request.CustomerList)
+                    var transaction = connection.BeginTransaction();
+                    try
                     {
-                        SqliteCommand checkCustomer = new SqliteCommand(countCustomer, connection);
-                        SqliteParameter customerIdParam = new SqliteParameter("@id", customer.Id);
-                        SqliteParameter customerFParam = new SqliteParameter("@f", customer.F);
-                        SqliteParameter customerIParam = new SqliteParameter("@i", customer.I);
-                        SqliteParameter customerOParam = new SqliteParameter("@o", customer.O);
-                        checkCustomer.Parameters.Add(customerIdParam);
-                        object transactionResult = checkCustomer.ExecuteScalar();
-                        if (Convert.ToInt32(transactionResult) == 0)
+                        foreach (Customer customer in request.CustomerList)
                         {
-                            SqliteCommand addCustomer = new SqliteCommand(insertCustomer, connection);
-                            addCustomer.Parameters.Add(customerIdParam);
-                            addCustomer.Parameters.Add(customerFParam);
-                            addCustomer.Parameters.Add(customerIParam);
-                            addCustomer.Parameters.Add(customerOParam);
-                            addCustomer.ExecuteNonQuery();
-                        }
-                        else
-                        {
-                            SqliteCommand updateCustomer = new SqliteCommand(updateCustomerString, connection);
-                            updateCustomer.Parameters.Add(customerIdParam);
-                            updateCustomer.Parameters.Add(customerFParam);
-                            updateCustomer.Parameters.Add(customerIParam);
-                            updateCustomer.Parameters.Add(customerOParam);
-                            updateCustomer.ExecuteNonQuery();
-                        }
-
-                        foreach (Animal animal in customer.AnimalList)
-                        {
-                            SqliteCommand checkAnimal = new SqliteCommand(countAnimal, connection);
-                            SqliteParameter animalIdParam = new SqliteParameter("@id", animal.Id);
-                            SqliteParameter animalCustomerId = new SqliteParameter("@customerId", customer.Id);
-                            SqliteParameter animalType = new SqliteParameter("@type", animal.Type);
-                            SqliteParameter animalNameParam = new SqliteParameter("@Name", animal.Name);
-                            SqliteParameter animalBirthDate = new SqliteParameter("@BirthDate", animal.BirthDate);
-                            checkAnimal.Parameters.Add(animalIdParam);
-                            transactionResult = checkAnimal.ExecuteScalar();
-                            if(Convert.ToInt32(transactionResult) == 0 )
+                            SqliteCommand checkCustomer = new SqliteCommand(countCustomer, connection);
+                            SqliteParameter customerIdParam = new SqliteParameter("@id", customer.Id);
+                            SqliteParameter customerFParam = new SqliteParameter("@f", customer.F);
+                            SqliteParameter customerIParam = new SqliteParameter("@i", customer.I);
+                            SqliteParameter customerOParam = new SqliteParameter("@o", customer.O);
+                            checkCustomer.Parameters.Add(customerIdParam);
+                            object transactionResult = checkCustomer.ExecuteScalar();
+                            if (Convert.ToInt32(transactionResult) == 0)
                             {
-                                SqliteCommand addAnimal = new SqliteCommand(insertAnimal, connection);
-                                addAnimal.Parameters.Add(animalIdParam);
-                                addAnimal.Parameters.Add(animalCustomerId);
-                                addAnimal.Parameters.Add(animalType);
-                                addAnimal.Parameters.Add(animalNameParam);
-                                addAnimal.Parameters.Add(animalBirthDate);
-                                addAnimal.ExecuteNonQuery();
+                                SqliteCommand addCustomer = new SqliteCommand(insertCustomer, connection);
+                                addCustomer.Parameters.Add(customerIdParam);
+                                addCustomer.Parameters.Add(customerFParam);
+                                addCustomer.Parameters.Add(customerIParam);
+                                addCustomer.Parameters.Add(customerOParam);
+                                addCustomer.ExecuteNonQuery();
                             }
                             else
                             {
-                                SqliteCommand updateAnimal = new SqliteCommand(updateAnimalString, connection);
-                                updateAnimal.Parameters.Add(animalIdParam);
-                                updateAnimal.Parameters.Add(animalCustomerId);
-                                updateAnimal.Parameters.Add(animalType);
-                                updateAnimal.Parameters.Add(animalNameParam);
-                                updateAnimal.Parameters.Add(animalBirthDate);
-                                updateAnimal.ExecuteNonQuery();
+                                SqliteCommand updateCustomer = new SqliteCommand(updateCustomerString, connection);
+                                updateCustomer.Parameters.Add(customerIdParam);
+                                updateCustomer.Parameters.Add(customerFParam);
+                                updateCustomer.Parameters.Add(customerIParam);
+                                updateCustomer.Parameters.Add(customerOParam);
+                                updateCustomer.ExecuteNonQuery();
+                            }
+
+                            foreach (Animal animal in customer.AnimalList)
+                            {
+                                SqliteCommand checkAnimal = new SqliteCommand(countAnimal, connection);
+                                SqliteParameter animalIdParam = new SqliteParameter("@id", animal.Id);
+                                SqliteParameter animalCustomerId = new SqliteParameter("@customerId", customer.Id);
+                                SqliteParameter animalType = new SqliteParameter("@type", animal.Type);
+                                SqliteParameter animalNameParam = new SqliteParameter("@Name", animal.Name);
+                                SqliteParameter animalBirthDate = new SqliteParameter("@BirthDate", animal.BirthDate);
+                                checkAnimal.Parameters.Add(animalIdParam);
+                                transactionResult = checkAnimal.ExecuteScalar();
+                                if (Convert.ToInt32(transactionResult) == 0)
+                                {
+                                    SqliteCommand addAnimal = new SqliteCommand(insertAnimal, connection);
+                                    addAnimal.Parameters.Add(animalIdParam);
+                                    addAnimal.Parameters.Add(animalCustomerId);
+                                    addAnimal.Parameters.Add(animalType);
+                                    addAnimal.Parameters.Add(animalNameParam);
+                                    addAnimal.Parameters.Add(animalBirthDate);
+                                    addAnimal.ExecuteNonQuery();
+                                }
+                                else
+                                {
+                                    SqliteCommand updateAnimal = new SqliteCommand(updateAnimalString, connection);
+                                    updateAnimal.Parameters.Add(animalIdParam);
+                                    updateAnimal.Parameters.Add(animalCustomerId);
+                                    updateAnimal.Parameters.Add(animalType);
+                                    updateAnimal.Parameters.Add(animalNameParam);
+                                    updateAnimal.Parameters.Add(animalBirthDate);
+                                    updateAnimal.ExecuteNonQuery();
+                                }
                             }
                         }
+                        transaction.Commit();
                     }
+                    catch (SqliteException ex)
+                    {
+                        transaction.Rollback();
+                        throw new SqliteException(ex.Message, ex.SqliteErrorCode, ex.SqliteExtendedErrorCode);  
+                    }
+                    
                 }
             }
             catch (SqliteException ex)
